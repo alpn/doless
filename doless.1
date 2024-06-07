@@ -1,0 +1,78 @@
+.\"
+.\"Copyright (c) 2024 github.com/alpn
+.\"
+.\"Permission to use, copy, modify, and distribute this software for any
+.\"purpose with or without fee is hereby granted, provided that the above
+.\"copyright notice and this permission notice appear in all copies.
+.\"
+.\"THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\"WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\"MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\"ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\"WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\"ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\"OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.Dd $Mdocdate: May 5 2024 $
+.Dt DOLESS 1
+.Os
+.Sh NAME
+.Nm doless
+.Nd execute commands restrictively
+.Sh SYNOPSIS
+.Nm doless
+.Op Fl p Ar promises
+.Op Fl rwxcWXCA Ar path
+.Op Fl l
+.Ar command
+.Op Ar arg ...
+.Sh DESCRIPTION
+The
+.Nm
+utility uses pledge(2) and unveil(2) to execute the given
+.Ar command
+with the provided restrictions applied.
+The
+.Ar command
+argument is mandatory, as is at least one of the options specified below.
+.Pp
+The options are as follows:
+.Bl -tag -width twelveletters
+.It Fl p Ar promises
+A list of
+.Ar promises
+to
+.Xr pledge 2 .
+This option should not be specified more than once.
+.It Fl r Ar path
+Make
+.Ar path
+available for read operations, corresponding to the pledge(2) promise "rpath".
+.It Fl w Ar path
+Make
+.Ar path
+available for write operations, corresponding to the pledge(2) promise "wpath".
+.It Fl x Ar path
+Make
+.Ar path
+available for execute operations, corresponding to the pledge(2) promise "exec".
+.It Fl c Ar path
+Allow
+.Ar path
+to be created and removed, corresponding to the pledge(2) promise "cpath".
+.It Fl l
+Make shared libraries available for read operations. This option is necessary if the provided command is a dynamically linked binary.
+.Sh EXIT STATUS
+.Ex -std doless
+.Sh EXAMPLES
+The following example will start a nodejs REPL instance that cannot see most of the filesystem, nor can it access the internet:
+.Bd -literal -offset indent
+$ doless -p "stdio rpath cpath wpath proc prot_exec tty" \\
+         -l -A "/home/a/.node_repl_history" /usr/local/bin/node
+.Sh SEE ALSO
+.Xr pledge 2 ,
+.Xr unveil 2
+.Sh CAVEATS
+This utility relies on an undocumented behavior of unveil(2).
+It is known to work correctly on OpenBSD 7.5, but that may change in the future.
+.Sh AUTHORS
+.An github.com/alpn
