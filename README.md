@@ -2,14 +2,14 @@
 
 execute commands restrictively on OpenBSD
 
-### Build / Install
+### install
 ```bash
 git clone https://github.com/alpn/doless.git
 cd doless
 make && doas make install
 ```
 
-### Usage
+### usage
 
 ```bash
 $ doless -p "stdio rpath cpath wpath proc prot_exec tty" \
