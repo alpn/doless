@@ -68,6 +68,14 @@ The following example will start a nodejs REPL instance that cannot see most of 
 .Bd -literal -offset indent
 $ doless -p "stdio rpath cpath wpath proc prot_exec tty" \\
          -l -A "/home/a/.node_repl_history" /usr/local/bin/node
+
+.Ed
+Here we run a
+.Xr ksh 2
+instance that can only read files under /tmp
+.Bd -literal -offset indent
+$ doless -X /bin -r /tmp
+.Ed
 .Sh SEE ALSO
 .Xr pledge 2 ,
 .Xr unveil 2
