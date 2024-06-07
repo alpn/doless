@@ -12,7 +12,7 @@ make && doas make install
 ### Usage
 
 ```bash
-$ doless -p "stdio rpath cpath wpath proc prot_exec tty" \\
+$ doless -p "stdio rpath cpath wpath proc prot_exec tty" \
          -l -A "/home/a/.node_repl_history" /usr/local/bin/node
 ```
 
