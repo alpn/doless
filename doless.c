@@ -122,6 +122,7 @@ main(int argc, char* argv[]) {
         err(1, "pledge");
 
     // XXX: unveiled paths persist execv only if the process has pledged
+    // see - /src/sys/kern/kern_exec.c:577
     if (!promises)
         promises = ALLPROM;
 
